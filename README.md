@@ -157,7 +157,45 @@ Pi-hole allows you to subscribe to external ad-blocking lists or add your own UR
 - **Hints:**  
   - Run `pihole -g` or *Update Gravity* after modifying lists  
   - Multiple URLs can be added at once, separated by spaces or commas  
-  - Icons next to each list indicate the list’s health and update status  
+  - Icons next to each list indicate the list’s health and update status
+## 🧱 Blocklist vs. Allowlist
+
+Pi-hole decides for every DNS query whether a domain should be **resolved** (allowed) or **blocked**.  
+This behavior is controlled by two types of lists: **Blocklists** and **Allowlists**.
+
+### 🚫 Blocklist
+**Domains you don’t want your devices to connect to.**
+
+**Examples:**
+- `ads.google.com`
+- `tracking.facebook.net`
+- `doubleclick.net`
+
+**Behavior:**
+- Pi-hole denies DNS resolution (returns `0.0.0.0` or no response).  
+- Ads and trackers fail to load, improving browsing performance and privacy.
+
+**Sources:**
+- Public blocklists (e.g., StevenBlack, OISD, Energized)  
+- Custom domains added manually
+
+### ✅ Allowlist
+**Domains you always want to allow, even if they appear on a blocklist.**
+
+**Examples:**
+- `cdn.cloudflare.com`  
+- `youtube.com` (if some necessary content gets blocked)
+
+**Behavior:**
+- Domains are **always resolved**, regardless of blocklists.  
+- Useful when legitimate services are blocked by mistake.
+
+### ⚖️ How They Work Together
+1. DNS request is made.  
+2. Pi-hole checks in this order:
+   - If domain is on **Allowlist** → ✅ Allow  
+   - If domain is on **Blocklist** → 🚫 Block  
+   - Otherwise → 🌐 Resolve normally
 
 Once lists are added, Pi-hole automatically blocks DNS requests to any domain found on those lists — effectively preventing ads, tracking, and unwanted connections.
 
